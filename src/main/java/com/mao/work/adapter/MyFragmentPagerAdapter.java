@@ -13,7 +13,7 @@ import com.mao.work.*;
 public class MyFragmentPagerAdapter extends FragmentPagerAdapter {
 
     private final int PAGER_COUNT = 4;
-    private MyFragment myFragment1 = null;
+    private MyFragment1 myFragment1 = null;
     private MyFragment2 myFragment2 = null;
     private MyFragment3 myFragment3 = null;
     private MyFragment4 myFragment4 = null;
@@ -21,7 +21,7 @@ public class MyFragmentPagerAdapter extends FragmentPagerAdapter {
 
     public MyFragmentPagerAdapter(FragmentManager fm) {
         super(fm);
-        myFragment1 = new MyFragment();
+        myFragment1 = new MyFragment1();
         myFragment2 = new MyFragment2();
         myFragment3 = new MyFragment3();
         myFragment4 = new MyFragment4();
