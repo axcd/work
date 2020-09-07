@@ -23,7 +23,7 @@ public class MyFragment2 extends Fragment
 {
 
 	private View view;
-	private float[] data = new float[21];
+	private static float[] data = new float[21];
 	private boolean isCreated = false;
 
     public MyFragment2()
@@ -34,8 +34,11 @@ public class MyFragment2 extends Fragment
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
 	{
-		view = inflater.inflate(R.layout.page_two, container, false);
-		isCreated = true;
+		if(!isCreated)
+		{
+			view = inflater.inflate(R.layout.page_two, container, false);
+			isCreated = true;
+		}
 		
         return view;
     }
@@ -44,23 +47,28 @@ public class MyFragment2 extends Fragment
 	public void setUserVisibleHint(boolean isVisibleToUser)
 	{
 		super.setUserVisibleHint(isVisibleToUser);
-
+		
 		if (isCreated && isVisibleToUser)
 		{
-			//数组置零,获取数据
-			String[] companies = new String[] {
-				"平时加班", "周末加班", "节假日加班", "中班天数", "夜班天数" ,
-				"调休(小时)", "事假(小时)", "病假(小时)","年假(小时)",
-				"本月绩效", "岗位补贴", "高温补贴", "社会保险", "公积金", 
-				"其他补贴", "其他扣款", "平时加班费", "周末加班费", "节假日加班费",
-				"本月应发", "本月实发"};
-			ListAdapter adapter = new MyAdapter(getActivity(), companies);
-			getData();
-
-			//添加适配器
-			ListView listView = (ListView) view.findViewById(R.id.pagetwoListView);
-			listView.setAdapter(adapter);
+			setView();
 		}
+	}
+	
+	public void setView()
+	{
+		//数组置零,获取数据
+		String[] companies = new String[] {
+			"平时加班", "周末加班", "节假日加班", "中班天数", "夜班天数" ,
+			"调休(小时)", "事假(小时)", "病假(小时)","年假(小时)",
+			"本月绩效", "岗位补贴", "高温补贴", "社会保险", "公积金", 
+			"其他补贴", "其他扣款", "平时加班费", "周末加班费", "节假日加班费",
+			"本月应发", "本月实发"};
+		ListAdapter adapter = new MyAdapter(getActivity(), companies);
+		getData();
+
+		//添加适配器
+		ListView listView = (ListView) view.findViewById(R.id.pagetwoListView);
+		listView.setAdapter(adapter);
 	}
 
 	public void getData()
