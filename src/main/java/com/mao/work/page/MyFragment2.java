@@ -51,8 +51,8 @@ public class MyFragment2 extends Fragment
 			String[] companies = new String[] {
 				"平时加班", "周末加班", "节假日加班", "中班天数", "夜班天数" ,
 				"调休(小时)", "事假(小时)", "病假(小时)","年假(小时)",
-				"绩效", "岗位补贴", "高温补贴", 
-				"社会保险", "公积金", "其他补贴", "其他扣款", "平时加班费", "周末加班费", "节假日加班费",
+				"本月绩效", "岗位补贴", "高温补贴", "社会保险", "公积金", 
+				"其他补贴", "其他扣款", "平时加班费", "周末加班费", "节假日加班费",
 				"本月应发", "本月实发"};
 			ListAdapter adapter = new MyAdapter(getActivity(), companies);
 			getData();
@@ -72,10 +72,15 @@ public class MyFragment2 extends Fragment
 		}
 
 		//把两月组合成一个月
-		Month month = Config.getPreMonth();
+		Month month  = new Month("");
+		for(int i=Config.getStartDay();i<=31;i++)
+		{
+			month.setDay(i,Config.getPreMonth().getDay(i));
+		}
+		
 		for (int i=1; i < Config.getStartDay(); i++)
 		{
-			month.getDays()[i-1] = Config.getNextMonth().getDay(i);
+			month.setDay(i, Config.getNextMonth().getDay(i));
 		}
 
 		//遍历该周期
@@ -179,23 +184,23 @@ public class MyFragment2 extends Fragment
 			//基本工资
 			int base =2200;
 			//平时加班费
-			data[16] = F(base / 21.75 / 8 * 1.5 * data[0]);
+			data[16] = F((base / 21.75 / 8 * 1.5 * data[0]),1);
 			//周末加班费
-			data[17] = F(base / 21.75 / 8 * 2 * data[1]);
+			data[17] = F((base / 21.75 / 8 * 2 * data[1]),1);
 			//节假日加班费
-			data[18] = F(base / 21.75 / 8 * 3 * data[2]);
+			data[18] = F((base / 21.75 / 8 * 3 * data[2]),1);
 			//应发工资
-			data[19] = F(base + data[3] * 0 + data[4] * 15 + data[16] + data[17] + data[18] + data[9] + data[10] + data[11] + data[14]);
+			data[19] = F((base + data[3] * 0 + data[4] * 15 + data[16] + data[17] + data[18] + data[9] + data[10] + data[11] + data[14]),1);
 			//实发工资
-			data[20] = F(data[19] - (float)(base / 21.75 / 8 * 1.5 * data[5]) - (float)(base / 21.75 / 8 * data[6]) - (float)(base / 21.75 / 8 * 0.3 * data[7])-data[12] - data[13] - data[15]);
+			data[20] = F((data[19] - (float)(base / 21.75 / 8 * 1.5 * data[5]) - (float)(base / 21.75 / 8 * data[6]) - (float)(base / 21.75 / 8 * 0.3 * data[7])-data[12] - data[13] - data[15]),1);
 		}
 	}
 
 	//设置保留位数
-	public float F(double num)
+	public float F(double num, int n)
 	{
 		BigDecimal bg = new BigDecimal(num);
-		double num1 = bg.setScale(1, BigDecimal.ROUND_HALF_UP).doubleValue();
+		double num1 = bg.setScale(n, BigDecimal.ROUND_HALF_UP).doubleValue();
 		return((float)num1);
 	}
 

@@ -15,12 +15,6 @@ public class Month implements Serializable
 		this.days = new Day[31];
 	}
 
-//	public Month(String index, Day[] days)
-//	{
-//		this.index = index;
-//		this.days = days;
-//	}
-//
 	public void setDay(int i, Day day)
 	{
 		if(i>0 && i<=days.length+1)
