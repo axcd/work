@@ -14,6 +14,7 @@ import android.content.Context;
 import com.mao.work.config.*;
 import com.mao.work.bean.*;
 import com.mao.work.enum.*;
+import java.math.*;
 
 /**
  * Created by Jay on 2015/8/28 0028.
@@ -21,56 +22,64 @@ import com.mao.work.enum.*;
 public class MyFragment2 extends Fragment
 {
 
-	private float[] data = { 
-		0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
-		0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 
-		0, 0, 0, 0, 0, 0, 0, 0, 0, 0 };
+	private View view;
+	private float[] data = new float[21];
+	private boolean isCreated = false;
 
     public MyFragment2()
 	{
+		//空构造函数
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
 	{
-
-		View view = inflater.inflate(R.layout.page_two, container, false);
-
-		String[] companies = new String[] {
-			"平时加班", "周末加班", "节假日加班", "中班天数", "夜班天数" ,
-			"调休(小时)", "事假(小时)", "病假(小时)","年假(小时)",
-			"绩效", "岗位补贴", "高温补贴", 
-			"社会保险", "公积金", "其他补贴", "其他扣款", 
-			"本月应发", "本月实发"};
-
-		setZero();
-        ListAdapter adapter = new MyAdapter(getActivity(), companies);
-		getData();
-
-        ListView listView = (ListView) view.findViewById(R.id.pagetwoListView);
-		listView.setAdapter(adapter);
-
+		view = inflater.inflate(R.layout.page_two, container, false);
+		isCreated = true;
+		
         return view;
     }
 
-	public void setZero()
+	@Override
+	public void setUserVisibleHint(boolean isVisibleToUser)
 	{
-		for (int i=0;i < data.length;i++)
+		super.setUserVisibleHint(isVisibleToUser);
+
+		if (isCreated && isVisibleToUser)
 		{
-			data[i] = 0;
+			//数组置零,获取数据
+			String[] companies = new String[] {
+				"平时加班", "周末加班", "节假日加班", "中班天数", "夜班天数" ,
+				"调休(小时)", "事假(小时)", "病假(小时)","年假(小时)",
+				"绩效", "岗位补贴", "高温补贴", 
+				"社会保险", "公积金", "其他补贴", "其他扣款", "平时加班费", "周末加班费", "节假日加班费",
+				"本月应发", "本月实发"};
+			ListAdapter adapter = new MyAdapter(getActivity(), companies);
+			getData();
+
+			//添加适配器
+			ListView listView = (ListView) view.findViewById(R.id.pagetwoListView);
+			listView.setAdapter(adapter);
 		}
 	}
 
 	public void getData()
 	{
+		//数组置零
+		for (int i=0;i < data.length;i++)
+		{
+			data[i] = 0;
+		}
+
 		//把两月组合成一个月
 		Month month = Config.getPreMonth();
-		for (int i=0; i < Config.getStartDay(); i++)
+		for (int i=1; i < Config.getStartDay(); i++)
 		{
-			month.getDays()[i] = null;
-			month.getDays()[i] = Config.getNextMonth().getDay(i);
+			month.getDays()[i-1] = Config.getNextMonth().getDay(i);
 		}
-		for (int i=0; i <= 31; i++)
+
+		//遍历该周期
+		for (int i=1; i <= 31; i++)
 		{
 
 			if (null != month.getDay(i))
@@ -153,11 +162,45 @@ public class MyFragment2 extends Fragment
 					}
 				}
 			}
+			//绩效
+			data[9] = 1200;
+			//岗位补贴
+			data[10] = 100;
+			//高温补贴
+			data[11] = 0;
+			//社会保险
+			data[12] = 600;
+			//公积金
+			data[13] = 600;
+			//其他补贴
+			data[14] = 0;
+			//其他扣款
+			data[15] = 0;
+			//基本工资
+			int base =2200;
+			//平时加班费
+			data[16] = F(base / 21.75 / 8 * 1.5 * data[0]);
+			//周末加班费
+			data[17] = F(base / 21.75 / 8 * 2 * data[1]);
+			//节假日加班费
+			data[18] = F(base / 21.75 / 8 * 3 * data[2]);
+			//应发工资
+			data[19] = F(base + data[3] * 0 + data[4] * 15 + data[16] + data[17] + data[18] + data[9] + data[10] + data[11] + data[14]);
+			//实发工资
+			data[20] = F(data[19] - (float)(base / 21.75 / 8 * 1.5 * data[5]) - (float)(base / 21.75 / 8 * data[6]) - (float)(base / 21.75 / 8 * 0.3 * data[7])-data[12] - data[13] - data[15]);
 		}
 	}
 
-    class MyAdapter extends ArrayAdapter<String>
-    {
+	//设置保留位数
+	public float F(double num)
+	{
+		BigDecimal bg = new BigDecimal(num);
+		double num1 = bg.setScale(1, BigDecimal.ROUND_HALF_UP).doubleValue();
+		return((float)num1);
+	}
+
+	class MyAdapter extends ArrayAdapter<String>
+	{
 		public MyAdapter(Context context, String[] values) 
 		{
 			super(context, R.layout.entry, values);
@@ -179,5 +222,5 @@ public class MyFragment2 extends Fragment
 
 			return view;
 		}
-    }
+	}
 }

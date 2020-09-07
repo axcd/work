@@ -21,7 +21,7 @@ public class MyFragment3 extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fg_content,container,false);
         TextView txt_content = (TextView) view.findViewById(R.id.txt_content);
-        txt_content.setText("第三个Fragment");
+        txt_content.setText("功能未开放");
         return view;
     }
 }

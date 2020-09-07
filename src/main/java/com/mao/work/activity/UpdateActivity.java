@@ -59,10 +59,10 @@ public class UpdateActivity extends Activity
 			month = Config.getNextMonth();
 		}
 
-		RadioGroup shiftRadioGroup = (RadioGroup)findViewById(R.id.shiftRadioGroup);
-		RadioGroup rateRadioGroup = (RadioGroup)findViewById(R.id.rateRadioGroup);
-		RadioGroup fakeRadioGroup = (RadioGroup)findViewById(R.id.fakeRadioGroup);
-		RadioGroup hourRadioGroup = (RadioGroup)findViewById(R.id.hourRadioGroup);
+		final RadioGroup shiftRadioGroup = (RadioGroup)findViewById(R.id.shiftRadioGroup);
+		final RadioGroup rateRadioGroup = (RadioGroup)findViewById(R.id.rateRadioGroup);
+		final RadioGroup fakeRadioGroup = (RadioGroup)findViewById(R.id.fakeRadioGroup);
+		final RadioGroup hourRadioGroup = (RadioGroup)findViewById(R.id.hourRadioGroup);
 		
 		final ScrollView hourScrollView = (ScrollView)findViewById(R.id.hourScrollView);
 		hourScrollView.post(new Runnable(){
@@ -79,6 +79,29 @@ public class UpdateActivity extends Activity
 					RadioButton rb = (RadioButton) findViewById(p2);
 					String str = rb.getText().toString();
 					shift = Shift.get(str);
+					
+					//选中白班，修改hour
+					if(shift.equals(Shift.DAY))
+					{
+						hour = Hour.THREE;
+						((RadioButton)hourRadioGroup.getChildAt(6)).setChecked(true);
+						if(Config.isWeekend())
+						{
+							hour = Hour.ELEVEN;
+							((RadioButton)hourRadioGroup.getChildAt(22)).setChecked(true);
+						}
+					}
+					//如果选中夜班，修改hour
+					if(shift.equals(Shift.NIGHT))
+					{
+						hour = Hour.THREE_AND_HALF;
+						((RadioButton)hourRadioGroup.getChildAt(7)).setChecked(true);
+						if(Config.isWeekend())
+						{
+							hour = Hour.ELEVEN_AND_HALF;
+							((RadioButton)hourRadioGroup.getChildAt(23)).setChecked(true);
+						}
+					}
 				}
 			});
 
@@ -109,6 +132,7 @@ public class UpdateActivity extends Activity
 				}
 			});
 
+		//设置点开默认选中
 		((RadioButton)shiftRadioGroup.getChildAt(0)).setChecked(true);
 		((RadioButton)rateRadioGroup.getChildAt(0)).setChecked(true);
 		((RadioButton)fakeRadioGroup.getChildAt(0)).setChecked(true);
