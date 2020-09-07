@@ -29,7 +29,6 @@ import com.mao.work.util.*;
 public class MyFragment1 extends Fragment {
 	
 	private GridView gv;
-	private Calendar cal;
 	private View view;
 
 	static TextView mtv;
@@ -43,21 +42,10 @@ public class MyFragment1 extends Fragment {
 
 		TextView ptv = (TextView)view.findViewById(R.id.premonth);
 		TextView ntv = (TextView)view.findViewById(R.id.nextmonth);
-//		mtv = (TextView)view.findViewById(R.id.mainTextView1);
 		gv = (GridView)view.findViewById(R.id.mainGridView);
-
-		cal = Calendar.getInstance();
-		Config.setToday(cal.getTime());
 		
-
-		//如果大于开始日期显示在下一月
-		if (cal.get(Calendar.DATE) > Config.getStartDay() && Config.getStartDay() != 1)
-		{
-			cal.add(Calendar.MONTH, 1);
-		}
-
 		//获取View
-		getCalendarView(cal);
+		getCalendarView();
 		
 		ptv.setOnClickListener(new View.OnClickListener(){
 		public void onClick(View view)
@@ -79,28 +67,28 @@ public class MyFragment1 extends Fragment {
 	//上一月
 	public void preMonth()
 	{
-		cal.add(Calendar.MONTH, -1);
-		getCalendarView(cal);
+		Config.getCalendar().add(Calendar.MONTH, -1);
+		getCalendarView();
 	}
 
 	//下一月
 	public void nextMonth()
 	{
-		cal.add(Calendar.MONTH, 1);
-		getCalendarView(cal);
+		Config.getCalendar().add(Calendar.MONTH, 1);
+		getCalendarView();
 	}
 
-	public void getCalendarView(Calendar cal)
+	public void getCalendarView()
 	{
 
 		//设置显示年月		
-		Calendar calendar = (Calendar)cal.clone();
+		Calendar calendar = (Calendar)Config.getCalendar().clone();
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy年MM月");
 		TextView tv = (TextView)view.findViewById(R.id.yyyyMM);
 		tv.setText(sdf.format(calendar.getTime()));
 
 		//添加canlendar配置
-		Config.set(cal);
+		Config.setConfig();
 
 		//设置开始日期
 		if (Config.getStartDay() != 1)

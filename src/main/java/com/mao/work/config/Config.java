@@ -19,31 +19,30 @@ public class Config
 	private static Month nextMonth;
 	private static DayView selectedView;
 	private static boolean weekend;
-
-	//测试数据
-	public static Month getMonth()
+	private static Calendar calendar;
+	
+	public static void initCalendar()
 	{
-		Month month = new Month("2020/10");
-		Day day = null;
 
-		day = new Day("2020-10-01", Shift.DAY, Fake.LEAVE, Rate.ONE_AND_HALF, Hour.THREE);month.setDay(1,day);
-		day = new Day("2020-10-02", Shift.DAY, Fake.NORMAL, Rate.ONE_AND_HALF, Hour.THREE);month.setDay(2,day);
-		day = new Day("2020-10-03", Shift.DAY, Fake.NORMAL, Rate.THREE, Hour.THREE);month.setDay(3,day);
-		day = new Day("2020-10-04", Shift.MIDDLE, Fake.LEAVE, Rate.ONE_AND_HALF, Hour.THREE);month.setDay(4,day);
-		day = new Day("2020-10-05", Shift.MIDDLE, Fake.TAKEOFF, Rate.ONE_AND_HALF, Hour.ELEVEN_AND_HALF);month.setDay(5,day);
-		day = new Day("2020-10-06", Shift.MIDDLE, Fake.NORMAL, Rate.ONE_AND_HALF, Hour.THREE);month.setDay(6,day);
-		day = new Day("2020-10-07", Shift.NIGHT, Fake.SICK, Rate.ONE_AND_HALF, Hour.THREE);month.setDay(7,day);
+		Config.calendar = Calendar.getInstance();
+		Config.setToday(Config.calendar.getTime());
 
-		return month;
+
+		//如果大于开始日期显示在下一月
+		if (calendar.get(Calendar.DATE) > Config.getStartDay() && Config.getStartDay() != 1)
+		{
+			Config.calendar.add(Calendar.MONTH, 1);
+		}
+		
 	}
 	
 	//设置Config
-	public static void set(Calendar calendar)
+	public static void setConfig()
 	{
-		setStartDate(calendar);
-		setEndDate(calendar);
+		setStartDate(getCalendar());
+		setEndDate(getCalendar());
 
-		Calendar cal = (Calendar)calendar.clone();
+		Calendar cal = (Calendar)getCalendar().clone();
 		ObjectIO<Month> io = new ObjectIO<Month>();
 		SimpleDateFormat sdf = new SimpleDateFormat("yyyy/MM");
 
@@ -171,6 +170,16 @@ public class Config
 	public static boolean isWeekend()
 	{
 		return weekend;
+	}
+	
+	public static void setCalendar(Calendar calendar)
+	{
+		Config.calendar = calendar;
+	}
+
+	public static Calendar getCalendar()
+	{
+		return calendar;
 	}
 	
 }

@@ -10,6 +10,7 @@ import com.mao.work.adapter.*;
 import com.mao.work.util.*;
 import android.*;
 import android.content.pm.*;
+import com.mao.work.config.*;
 
 /**
  * Created by Coder-pig on 2015/8/28 0028.
@@ -40,6 +41,9 @@ public class MainActivity extends AppCompatActivity implements RadioGroup.OnChec
 
 		//申请读写权限
 		PermissionUtil.requestPermission(this);
+
+		//初始化calendar
+		Config.initCalendar();
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);

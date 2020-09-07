@@ -27,6 +27,12 @@ public class MyFragmentPagerAdapter extends FragmentPagerAdapter {
         myFragment4 = new MyFragment4();
     }
 
+	@Override
+	public int getItemPosition(Object object)
+	{
+		// TODO: Implement this method
+		return POSITION_NONE;
+	}
 
     @Override
     public int getCount() {
