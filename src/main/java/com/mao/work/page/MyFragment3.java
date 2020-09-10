@@ -120,8 +120,10 @@ public class MyFragment3 extends Fragment
 			textView1.setText(text);
 
 			final EditText textView2 = (EditText) view.findViewById(R.id.entryEditText);
+			
 			textView2.setText(data[position] + "");
-			textView2.setTag(position+"");
+			if(position==1)textView2.setText((int)data[position] + "");
+			//textView2.setTag(position+"");
 
 			textView2.setOnClickListener(new View.OnClickListener(){
 					public void onClick(View view){
@@ -138,6 +140,9 @@ public class MyFragment3 extends Fragment
 									EditText ett = (EditText)(dialogv.getChildAt(0));
 									textView2.setText( ett.getText().toString());
 									data[position] = Float.parseFloat(ett.getText().toString());
+									
+									if(data[1]<1 || data[1]>31)data[1]=1;
+									if(position==1)textView2.setText((int)data[position] + "");
 									saveSettings();
 									
 								}
