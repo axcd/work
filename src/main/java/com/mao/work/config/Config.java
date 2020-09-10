@@ -7,10 +7,14 @@ import com.mao.work.enum.*;
 import com.mao.work.io.*;
 import java.text.*;
 import com.mao.work.*;
+import com.mao.work.settings.*;
+import android.view.*;
+import android.app.*;
+import com.mao.work.page.*;
 
 public class Config
 {
-	private static int startDay = 24;
+	private static Settings settings;
 	private static Date today;
 	private static Date selectedDate;
 	private static Date startDate;
@@ -21,19 +25,28 @@ public class Config
 	private static boolean weekend;
 	private static Calendar calendar;
 	
-	public static void initCalendar()
+	public static void init()
 	{
+
+		settings = new ObjectIO<Settings>().inObject("settings");
+		if(null==settings)  settings = new Settings();
 
 		Config.calendar = Calendar.getInstance();
 		Config.setToday(Config.calendar.getTime());
 
-
 		//如果大于开始日期显示在下一月
-		if (calendar.get(Calendar.DATE) > Config.getStartDay() && Config.getStartDay() != 1)
+		if (calendar.get(Calendar.DATE) > Config.getSettings().getStartDay() && Config.getSettings().getStartDay() != 1)
 		{
 			Config.calendar.add(Calendar.MONTH, 1);
 		}
 		
+	}
+	
+	public static void save()
+	{
+		new ObjectIO<Settings>().out(settings,"settings");
+		setConfig();
+		MyFragment2.setView();
 	}
 	
 	//设置Config
@@ -60,19 +73,20 @@ public class Config
 		{
 			setPreMonth(new Month(pMonth));
 		}
+
 	}
 	
 	//设置开始日期
 	public static void setStartDate(Calendar calendar)
 	{
 		Calendar start_cal = (Calendar)calendar.clone();
-	    if(Config.getStartDay()!=1)start_cal.add(Calendar.MONTH, -1);
+	    if(Config.getSettings().getStartDay()!=1)start_cal.add(Calendar.MONTH, -1);
 		int maxDay = start_cal.getActualMaximum(Calendar.DATE);
 		
-		if(maxDay<startDay){
+		if(maxDay<Config.getSettings().getStartDay()){
 			start_cal.set(Calendar.DATE, maxDay);
 		}else{
-			start_cal.set(Calendar.DATE, startDay-1);
+			start_cal.set(Calendar.DATE, Config.getSettings().getStartDay()-1);
 		}
 		Config.startDate = start_cal.getTime();
 	}
@@ -86,13 +100,13 @@ public class Config
 	public static void setEndDate(Calendar calendar)
 	{
 		Calendar end_cal = (Calendar)calendar.clone();
-	    if(Config.getStartDay()==1)end_cal.add(Calendar.MONTH,1);
+	    if(Config.getSettings().getStartDay()==1)end_cal.add(Calendar.MONTH,1);
 		int maxDay = end_cal.getActualMaximum(Calendar.DATE);
 		
-		if(maxDay<startDay){
+		if(maxDay<Config.getSettings().getStartDay()){
 			end_cal.set(Calendar.DATE,maxDay+1);
 		}else{
-			end_cal.set(Calendar.DATE, startDay);
+			end_cal.set(Calendar.DATE, Config.getSettings().getStartDay());
 		}
 		Config.endDate = end_cal.getTime();
 	}
@@ -130,16 +144,6 @@ public class Config
 	public static Date getToday()
 	{
 		return today;
-	}
-
-	public static void setStartDay(int startDay)
-	{
-		Config.startDay = startDay;
-	}
-
-	public static int getStartDay()
-	{
-		return startDay;
 	}
 
 	public static void setPreMonth(Month preMonth)
@@ -182,4 +186,13 @@ public class Config
 		return calendar;
 	}
 	
+	public static void setSettings(Settings settings)
+	{
+		Config.settings = settings;
+	}
+
+	public static Settings getSettings()
+	{
+		return settings;
+	}
 }

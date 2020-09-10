@@ -69,6 +69,7 @@ public class MyFragment1 extends Fragment {
 	{
 		Config.getCalendar().add(Calendar.MONTH, -1);
 		getCalendarView();
+		MyFragment2.setView();
 	}
 
 	//下一月
@@ -76,6 +77,7 @@ public class MyFragment1 extends Fragment {
 	{
 		Config.getCalendar().add(Calendar.MONTH, 1);
 		getCalendarView();
+		MyFragment2.setView();
 	}
 
 	public void getCalendarView()
@@ -91,11 +93,11 @@ public class MyFragment1 extends Fragment {
 		Config.setConfig();
 
 		//设置开始日期
-		if (Config.getStartDay() != 1)
+		if (Config.getSettings().getStartDay() != 1)
 		{
 			calendar.add(Calendar.MONTH, -1);
 		}
-		calendar.set(Calendar.DATE, Config.getStartDay());
+		calendar.set(Calendar.DATE, Config.getSettings().getStartDay());
 
 		//获取List<Date>
 		List<Date> dates = new ArrayList<Date>();
@@ -239,36 +241,36 @@ class DayAdapter extends ArrayAdapter<Date>
 				});
 
 			//添加长按view事件
-			textView.setOnLongClickListener(new View.OnLongClickListener(){
-					public boolean onLongClick(View view)
-					{
-
-						if (null != Config.getSelectedView())
-						{
-							Config.getSelectedView().setSelected(false);
-						}
-
-						Config.setSelectedDate(date);
-						Config.setSelectedView(textView);
-						textView.setSelected(true);
-
-
-						//设置周末
-						if(position%7==0 || position%7==6)
-						{
-							Config.setWeekend(true);
-						}else
-						{
-							Config.setWeekend(false);
-						}
-
-						//这儿写长按逻辑
-						Intent intent = new Intent();
-						intent.setClass(getContext(), UpdateActivity.class);
-						getContext().startActivity(intent);
-						return true;
-					}
-				});
+//			textView.setOnLongClickListener(new View.OnLongClickListener(){
+//					public boolean onLongClick(View view)
+//					{
+//
+//						if (null != Config.getSelectedView())
+//						{
+//							Config.getSelectedView().setSelected(false);
+//						}
+//
+//						Config.setSelectedDate(date);
+//						Config.setSelectedView(textView);
+//						textView.setSelected(true);
+//
+//
+//						//设置周末
+//						if(position%7==0 || position%7==6)
+//						{
+//							Config.setWeekend(true);
+//						}else
+//						{
+//							Config.setWeekend(false);
+//						}
+//
+//						//这儿写长按逻辑
+//						Intent intent = new Intent();
+//						intent.setClass(getContext(), UpdateActivity.class);
+//						getContext().startActivity(intent);
+//						return true;
+//					}
+//				});
 		}
 		else
 		{

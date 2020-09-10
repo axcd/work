@@ -59,19 +59,23 @@ public class UpdateActivity extends Activity
 			month = Config.getNextMonth();
 		}
 
+		//设置显示日期
+		final TextView dateText = (TextView)findViewById(R.id.txt_topbar);
+		dateText.setText(date);
+		
 		final RadioGroup shiftRadioGroup = (RadioGroup)findViewById(R.id.shiftRadioGroup);
 		final RadioGroup rateRadioGroup = (RadioGroup)findViewById(R.id.rateRadioGroup);
 		final RadioGroup fakeRadioGroup = (RadioGroup)findViewById(R.id.fakeRadioGroup);
 		final RadioGroup hourRadioGroup = (RadioGroup)findViewById(R.id.hourRadioGroup);
-		
 		final ScrollView hourScrollView = (ScrollView)findViewById(R.id.hourScrollView);
-		hourScrollView.post(new Runnable(){
-				public void run()
-				{
-					hourScrollView.scrollTo(0, getY());
-				}
-			});
-			
+		//设置默认滚动条位置
+//		hourScrollView.post(new Runnable(){
+//				public void run()
+//				{
+//					hourScrollView.scrollTo(0, getY());
+//				}
+//			});
+//			
 		//增加监听
 		shiftRadioGroup.setOnCheckedChangeListener(new RadioGroup.OnCheckedChangeListener(){
 				public void onCheckedChanged(RadioGroup p1, int p2)

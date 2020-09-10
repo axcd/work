@@ -77,7 +77,7 @@
 		android:layout_above="@id/rg_tab_bar"
 		android:background="#8A1B8594"/>
 
-	<android.support.v4.view.ViewPager
+	<com.mao.work.layout.MyViewPager
 		android:id="@+id/vpager"
 		android:layout_width="match_parent"
 		android:layout_height="match_parent"

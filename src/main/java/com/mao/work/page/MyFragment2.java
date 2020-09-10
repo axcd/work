@@ -15,6 +15,7 @@ import com.mao.work.config.*;
 import com.mao.work.bean.*;
 import com.mao.work.enum.*;
 import java.math.*;
+import android.app.*;
 
 /**
  * Created by Jay on 2015/8/28 0028.
@@ -22,9 +23,9 @@ import java.math.*;
 public class MyFragment2 extends Fragment
 {
 
-	private View view;
-	private static float[] data = new float[21];
-	private boolean isCreated = false;
+	public static View view;
+	private static Activity activity;
+	public static float[] data = new float[22];
 
     public MyFragment2()
 	{
@@ -34,36 +35,23 @@ public class MyFragment2 extends Fragment
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState)
 	{
-		if(!isCreated)
-		{
-			view = inflater.inflate(R.layout.page_two, container, false);
-			isCreated = true;
-		}
-		
+
+		view = inflater.inflate(R.layout.page_two, container, false);
+		activity = getActivity();
+		setView();
         return view;
     }
 
-	@Override
-	public void setUserVisibleHint(boolean isVisibleToUser)
-	{
-		super.setUserVisibleHint(isVisibleToUser);
-		
-		if (isCreated && isVisibleToUser)
-		{
-			setView();
-		}
-	}
-	
-	public void setView()
+	public static void setView()
 	{
 		//数组置零,获取数据
 		String[] companies = new String[] {
 			"平时加班", "周末加班", "节假日加班", "中班天数", "夜班天数" ,
 			"调休(小时)", "事假(小时)", "病假(小时)","年假(小时)",
-			"本月绩效", "岗位补贴", "高温补贴", "社会保险", "公积金", 
+			"本月绩效", "岗位补贴", "交通补贴", "高温补贴", "社会保险", "公积金", 
 			"其他补贴", "其他扣款", "平时加班费", "周末加班费", "节假日加班费",
 			"本月应发", "本月实发"};
-		ListAdapter adapter = new MyAdapter(getActivity(), companies);
+		ListAdapter adapter = new MyAdapter(activity, companies);
 		getData();
 
 		//添加适配器
@@ -71,7 +59,7 @@ public class MyFragment2 extends Fragment
 		listView.setAdapter(adapter);
 	}
 
-	public void getData()
+	public static void getData()
 	{
 		//数组置零
 		for (int i=0;i < data.length;i++)
@@ -81,12 +69,14 @@ public class MyFragment2 extends Fragment
 
 		//把两月组合成一个月
 		Month month  = new Month("");
-		for(int i=Config.getStartDay();i<=31;i++)
+		int n = Config.getSettings().getStartDay();
+		if(n==1)n=32;
+		for (int i=n ;i <=31 ;i++)
 		{
-			month.setDay(i,Config.getPreMonth().getDay(i));
+			month.setDay(i, Config.getPreMonth().getDay(i));
 		}
-		
-		for (int i=1; i < Config.getStartDay(); i++)
+
+		for (int i=1; i < n; i++)
 		{
 			month.setDay(i, Config.getNextMonth().getDay(i));
 		}
@@ -176,64 +166,66 @@ public class MyFragment2 extends Fragment
 				}
 			}
 			//绩效
-			data[9] = 1200;
+			data[9] = Config.getSettings().getPerformance();
 			//岗位补贴
-			data[10] = 100;
+			data[10] = Config.getSettings().getPostSubsidy();
+			//交通补贴
+			data[11] = Config.getSettings().getTransportationSubsidy();
 			//高温补贴
-			data[11] = 0;
+			data[12] = Config.getSettings().getTemperatureSubsidy();
 			//社会保险
-			data[12] = 600;
+			data[13] = Config.getSettings().getSocialInsurance();
 			//公积金
-			data[13] = 600;
+			data[14] = Config.getSettings().getHousingFund();
 			//其他补贴
-			data[14] = 0;
+			data[15] = Config.getSettings().getOtherSubsidy();
 			//其他扣款
-			data[15] = 0;
+			data[16] = Config.getSettings().getOtherDeductions();
 			//基本工资
-			int base =2200;
+			float base = Config.getSettings().getBasePay();
 			//平时加班费
-			data[16] = F((base / 21.75 / 8 * 1.5 * data[0]),1);
+			data[17] = F((base / 21.75 / 8 * 1.5 * data[0]), 1);
 			//周末加班费
-			data[17] = F((base / 21.75 / 8 * 2 * data[1]),1);
+			data[18] = F((base / 21.75 / 8 * 2 * data[1]), 1);
 			//节假日加班费
-			data[18] = F((base / 21.75 / 8 * 3 * data[2]),1);
+			data[19] = F((base / 21.75 / 8 * 3 * data[2]), 1);
 			//应发工资
-			data[19] = F((base + data[3] * 0 + data[4] * 15 + data[16] + data[17] + data[18] + data[9] + data[10] + data[11] + data[14]),1);
+			data[20] = F((base + data[3] * 0 + data[4] * 15 + data[17] + data[18] + data[19] + data[9] + data[10] + data[12] + data[15]), 1);
 			//实发工资
-			data[20] = F((data[19] - (float)(base / 21.75 / 8 * 1.5 * data[5]) - (float)(base / 21.75 / 8 * data[6]) - (float)(base / 21.75 / 8 * 0.3 * data[7])-data[12] - data[13] - data[15]),1);
+			data[21] = F((data[20] - (float)(base / 21.75 / 8 * 1.5 * data[5]) - (float)(base / 21.75 / 8 * data[6]) - (float)(base / 21.75 / 8 * 0.3 * data[7]) - data[13] - data[14] - data[16]), 1);
 		}
 	}
 
 	//设置保留位数
-	public float F(double num, int n)
+	public static float F(double num, int n)
 	{
 		BigDecimal bg = new BigDecimal(num);
 		double num1 = bg.setScale(n, BigDecimal.ROUND_HALF_UP).doubleValue();
 		return((float)num1);
 	}
-
-	class MyAdapter extends ArrayAdapter<String>
+}
+class MyAdapter extends ArrayAdapter<String>
+{
+	public MyAdapter(Context context, String[] values) 
 	{
-		public MyAdapter(Context context, String[] values) 
-		{
-			super(context, R.layout.entry, values);
-		}
+		super(context, R.layout.page_two_entry, values);
+	}
 
-		@Override
-		public View getView(int position, View convertView, ViewGroup parent)
-		{
-			LayoutInflater inflater = LayoutInflater.from(getContext());
-			View view = inflater.inflate(R.layout.entry, parent, false);
+	@Override
+	public View getView(int position, View convertView, ViewGroup parent)
+	{
+		LayoutInflater inflater = LayoutInflater.from(getContext());
+		View view = inflater.inflate(R.layout.page_two_entry, parent, false);
 
-			String text = getItem(position);
+		String text = getItem(position);
 
-			TextView textView1 = (TextView) view.findViewById(R.id.entryTextView1);
-			textView1.setText(text);
+		TextView textView1 = (TextView) view.findViewById(R.id.entryTextView1);
+		textView1.setText(text);
 
-			TextView textView2 = (TextView) view.findViewById(R.id.entryTextView2);
-			textView2.setText(data[position] + "");
+		TextView textView2 = (TextView) view.findViewById(R.id.entryTextView2);
+		textView2.setText(MyFragment2. data[position] + "");
 
-			return view;
-		}
+		return view;
 	}
 }
+

@@ -42,8 +42,8 @@ public class MainActivity extends AppCompatActivity implements RadioGroup.OnChec
 		//申请读写权限
 		PermissionUtil.requestPermission(this);
 
-		//初始化calendar
-		Config.initCalendar();
+		//初始化config
+		Config.init();
 
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
