@@ -25,7 +25,7 @@ public class MyFragment2 extends Fragment
 
 	public static View view;
 	private static Activity activity;
-	public static float[] data = new float[22];
+	public static float[] data = new float[25];
 
     public MyFragment2()
 	{
@@ -49,7 +49,8 @@ public class MyFragment2 extends Fragment
 			"平时加班", "周末加班", "节假日加班", "中班天数", "夜班天数" ,
 			"调休(小时)", "事假(小时)", "病假(小时)","年假(小时)",
 			"本月绩效", "岗位补贴", "交通补贴", "高温补贴", "社会保险", "公积金", 
-			"其他补贴", "其他扣款", "平时加班费", "周末加班费", "节假日加班费",
+			"其他补贴", "其他扣款", "平时加班(H)","平时加班费", "周末加班(H)",
+			"周末加班费", "节假日加班(H)","节假日加班费",
 			"本月应发", "本月实发"};
 		ListAdapter adapter = new MyAdapter(activity, companies);
 		getData();
@@ -183,16 +184,25 @@ public class MyFragment2 extends Fragment
 			data[16] = Config.getSettings().getOtherDeductions();
 			//基本工资
 			float base = Config.getSettings().getBasePay();
+			//平时加班(H)
+			data[17] = F(base / 21.75 / 8 * 1.5 , 1);
 			//平时加班费
-			data[17] = F((base / 21.75 / 8 * 1.5 * data[0]), 1);
+			data[18] = F((data[17] * data[0]), 1);
+			//周末加班(H)
+			data[19] = F(base / 21.75 / 8 * 2 , 1);
 			//周末加班费
-			data[18] = F((base / 21.75 / 8 * 2 * data[1]), 1);
+			data[20] = F(data[19] * data[1], 1);
+			//节假日加班(H)
+			data[21] = F(base / 21.75 / 8 * 3 , 1);
 			//节假日加班费
-			data[19] = F((base / 21.75 / 8 * 3 * data[2]), 1);
+			data[22] = F(data[21] * data[2], 1);
+			
+			float middle = Config.getSettings().getMiddleShiftSubsidy();
+			float night = Config.getSettings().getNightShiftSubsidy();
 			//应发工资
-			data[20] = F((base + data[3] * 0 + data[4] * 15 + data[17] + data[18] + data[19] + data[9] + data[10] + data[12] + data[15]), 1);
+			data[23] = F((base + data[3] * middle + data[4] * night + data[18] + data[20] + data[22] + data[9] + data[10] + data[12] + data[15]), 1);
 			//实发工资
-			data[21] = F((data[20] - (float)(base / 21.75 / 8 * 1.5 * data[5]) - (float)(base / 21.75 / 8 * data[6]) - (float)(base / 21.75 / 8 * 0.3 * data[7]) - data[13] - data[14] - data[16]), 1);
+			data[24] = F((data[23] - (float)(base / 21.75 / 8 * 1.5 * data[5]) - (float)(base / 21.75 / 8 * data[6]) - (float)(base / 21.75 / 8 * 0.3 * data[7]) - data[13] - data[14] - data[16]), 1);
 		}
 	}
 

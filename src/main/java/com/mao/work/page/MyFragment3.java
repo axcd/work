@@ -138,7 +138,7 @@ public class MyFragment3 extends Fragment
 								@Override
 								public void onClick(DialogInterface dialog, int which) {
 									EditText ett = (EditText)(dialogv.getChildAt(0));
-									if(!"".equals(Float.parseFloat(ett.getText().toString()))){
+									if(!"".equals(ett.getText().toString())){
 										if(position!=1){
 											data[position] = Float.parseFloat(ett.getText().toString());
 											textView2.setText(data[position] + "");
@@ -154,12 +154,12 @@ public class MyFragment3 extends Fragment
 									
 								}
 							});
-						adBd.setNegativeButton("取消", new DialogInterface.OnClickListener() {
-								@Override
-								public void onClick(DialogInterface dialog, int which) {
-									saveSettings();
-								}
-							});
+						adBd.setNegativeButton("取消",null);// new DialogInterface.OnClickListener() {
+//								@Override
+//								public void onClick(DialogInterface dialog, int which) {
+//									//saveSettings();
+//								}
+//							});
 						aldg=adBd.create();
 						aldg.show();
 					}
