@@ -7,8 +7,8 @@
 
     <string name="tab_menu_alert">日历</string>
     <string name="tab_menu_profile">统计</string>
-    <string name="tab_menu_pay">我的</string>
-    <string name="tab_menu_setting">设置</string>
+    <string name="tab_menu_pay">设置</string>
+    <string name="tab_menu_setting">关于</string>
 
 
 </resources>

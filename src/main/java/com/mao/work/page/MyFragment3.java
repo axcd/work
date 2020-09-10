@@ -138,11 +138,18 @@ public class MyFragment3 extends Fragment
 								@Override
 								public void onClick(DialogInterface dialog, int which) {
 									EditText ett = (EditText)(dialogv.getChildAt(0));
-									textView2.setText( ett.getText().toString());
-									data[position] = Float.parseFloat(ett.getText().toString());
+									if(!"".equals(Float.parseFloat(ett.getText().toString()))){
+										if(position!=1){
+											data[position] = Float.parseFloat(ett.getText().toString());
+											textView2.setText(data[position] + "");
+										}else if(Float.parseFloat(ett.getText().toString())>=1 && Float.parseFloat(ett.getText().toString())<=31)
+										{
+											data[position] = Float.parseFloat(ett.getText().toString());
+											textView2.setText((int)data[position] + "");
+										}
+										
+									}
 									
-									if(data[1]<1 || data[1]>31)data[1]=1;
-									if(position==1)textView2.setText((int)data[position] + "");
 									saveSettings();
 									
 								}
