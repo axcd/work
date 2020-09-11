@@ -41,6 +41,12 @@ public class MyFragment3 extends Fragment
         return view;
     }
 
+	@Override
+	public void setUserVisibleHint(boolean isVisibleToUser)
+	{
+		// TODO: Implement this method
+//		super.setUserVisibleHint(isVisibleToUser);
+	}
 
 	public void setView()
 	{

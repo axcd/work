@@ -24,7 +24,7 @@ public class MainActivity extends AppCompatActivity implements RadioGroup.OnChec
     private RadioButton rb_channel;
     private RadioButton rb_message;
     private RadioButton rb_better;
-    private RadioButton rb_setting;
+//    private RadioButton rb_setting;
     private ViewPager vpager;
 
     private MyFragmentPagerAdapter mAdapter;
@@ -33,7 +33,7 @@ public class MainActivity extends AppCompatActivity implements RadioGroup.OnChec
     public static final int PAGE_ONE = 0;
     public static final int PAGE_TWO = 1;
     public static final int PAGE_THREE = 2;
-    public static final int PAGE_FOUR = 3;
+//    public static final int PAGE_FOUR = 3;
 
     @Override
     protected void onCreate(Bundle savedInstanceState)
@@ -59,7 +59,7 @@ public class MainActivity extends AppCompatActivity implements RadioGroup.OnChec
         rb_channel = (RadioButton) findViewById(R.id.rb_channel);
         rb_message = (RadioButton) findViewById(R.id.rb_message);
         rb_better = (RadioButton) findViewById(R.id.rb_better);
-        rb_setting = (RadioButton) findViewById(R.id.rb_setting);
+//        rb_setting = (RadioButton) findViewById(R.id.rb_setting);
         rg_tab_bar.setOnCheckedChangeListener(this);
 
         vpager = (ViewPager) findViewById(R.id.vpager);
@@ -82,9 +82,9 @@ public class MainActivity extends AppCompatActivity implements RadioGroup.OnChec
             case R.id.rb_better:
                 vpager.setCurrentItem(PAGE_THREE);
                 break;
-            case R.id.rb_setting:
-                vpager.setCurrentItem(PAGE_FOUR);
-                break;
+//            case R.id.rb_setting:
+//                vpager.setCurrentItem(PAGE_FOUR);
+//                break;
         }
     }
 
@@ -116,9 +116,9 @@ public class MainActivity extends AppCompatActivity implements RadioGroup.OnChec
                 case PAGE_THREE:
                     rb_better.setChecked(true);
                     break;
-                case PAGE_FOUR:
-                    rb_setting.setChecked(true);
-                    break;
+//                case PAGE_FOUR:
+//                    rb_setting.setChecked(true);
+//                    break;
             }
         }
 	}
